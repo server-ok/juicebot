@@ -2,6 +2,7 @@ import asyncio
 import discord
 from discord import client
 from discord import message
+from discord.activity import Game
 from discord.channel import VoiceChannel
 from discord.enums import ContentFilter
 from discord.errors import HTTPException
@@ -142,6 +143,10 @@ async def on_message(message):
         pass
     await bot.process_commands(message)
 
+@bot.event
+async def on_ready():
+    await bot.wait_until_ready()
+    await bot.change_presence(activity=discord.Game(name="жизнь на " + str(len(bot.guilds)) + ' серверах'))
 
 #                           КОМАНДЫ:
 
