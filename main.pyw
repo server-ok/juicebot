@@ -516,7 +516,6 @@ async def шар(ctx, *, text=None):
 
 @bot.command(help="Ищет пост во ВКонтакте по ключевому слову.")
 async def вкпост(ctx, *, q=None):
-    session = aiohttp.ClientSession()
     if q == None:
         emb = discord.Embed(
             color=settings["embedcolor"],
@@ -524,7 +523,6 @@ async def вкпост(ctx, *, q=None):
             description="Вы не указали запрос.",
         ).set_thumbnail(url=settings["bot_avatar_url"])
         await ctx.send(embed=emb)
-        await session.close()
     else:
         try:
             q.replace(" ", "+")
@@ -548,11 +546,11 @@ async def вкпост(ctx, *, q=None):
                 rightpost = 0
             elif (
                 responsejson["response"]["items"][1]["post_type"] == "post"
-            ):  # да, говнокод. мне просто было лень думать и я решил действовать.
-                rightpost = 1  # возможно потому-что я вчера устал писать эту фигню, психанул и пошёл в тф.
+            ):                                                                  # да, говнокод. мне просто было лень думать и я решил действовать.
+                rightpost = 1                                                   # возможно потому-что я вчера устал писать эту фигню, психанул и пошёл в тф.
             elif (
                 responsejson["response"]["items"][2]["post_type"] == "post"
-            ):  # энивей, эта фигня даже десяти процентов от кода не составляет, так что норм
+            ):                                                                  # энивей, эта фигня даже десяти процентов от кода не составляет, так что норм
                 rightpost = 2
             elif responsejson["response"]["items"][3]["post_type"] == "post":
                 rightpost = 3
@@ -627,16 +625,12 @@ async def вкпост(ctx, *, q=None):
                 await ctx.send(embed=embed)
                 endedvkpost = True
 
-            if endedvkpost == True:
-                await session.close()
         except IndexError or HTTPException:
-            await session.close()
             await ctx.send("Пост не найден.")
 
 
 @bot.command(help="Ищет видео в YouTube по запросу.")
 async def видео(ctx, *, q=None):
-    session = aiohttp.ClientSession()
     if q != None:
         try:
             q = q.replace(" ", "+")
@@ -669,7 +663,6 @@ async def видео(ctx, *, q=None):
                 .set_image(url=thumbnail)
             )
             await ctx.send(embed=embed)
-            await session.close()
         except IndexError:
             if 0 in responsejson["items"]:
                 videonum = 0
@@ -698,7 +691,6 @@ async def видео(ctx, *, q=None):
                     .set_image(url=thumbnail)
                 )
                 await ctx.send(embed=embed)
-                await session.close()
             else:
                 embed = discord.Embed(
                     title="Ошибка!",
@@ -715,7 +707,6 @@ async def видео(ctx, *, q=None):
                     ),
                 ).set_thumbnail(url=settings["bot_avatar_url"])
                 await ctx.send(embed=embed)
-                await session.close()
     else:
         embederror = discord.Embed(
             title="Ошибка!",
@@ -723,13 +714,10 @@ async def видео(ctx, *, q=None):
             color=settings["embedcolor"],
         ).set_thumbnail(url=settings["bot_avatar_url"])
         await ctx.send(embed=embederror)
-        await session.close()
-        pass
 
 
 @bot.command(help="Эта команда поможет вам подобрать ругательство.")
 async def обзови(ctx):
-    session = aiohttp.ClientSession()
     response = requests.get(
         "https://evilinsult.com/generate_insult.php?lang=ru&type=json"
     )
@@ -743,14 +731,12 @@ async def обзови(ctx):
         .set_footer(text=f"Обзывательство №{number}")
     )
     await ctx.send(embed=embed)
-    await session.close()
 
 
 @bot.command(
     help="С помощью этой команды ты можешь узнать текущую погоду.\nПосле команды необходимо написать название города."
 )
 async def погода(ctx, *, q=None):
-    session = aiohttp.ClientSession()
     if q != None:
         q = q.replace(" ", "+")
         endpoint = (
@@ -791,7 +777,6 @@ async def погода(ctx, *, q=None):
                 )
             )
             await ctx.send(embed=embed)
-            await session.close()
         else:
             embed = discord.Embed(
                 title="Ошибка!",
@@ -799,7 +784,6 @@ async def погода(ctx, *, q=None):
                 color=settings["embedcolor"],
             ).set_thumbnail(url=settings["bot_avatar_url"])
             await ctx.send(embed=embed)
-            await session.close()
     else:
         embed = discord.Embed(
             title="Ошибка!",
@@ -807,15 +791,14 @@ async def погода(ctx, *, q=None):
             color=settings["embedcolor"],
         ).set_thumbnail(url=settings["bot_avatar_url"])
         await ctx.send(embed=embed)
-        await session.close()
 
 @bot.command(help='Выводит топ участников по деньгам. Выводит только первую десятку.')
 async def топ(ctx):
-    coolswag = dict(sorted(economy.items(), key=lambda item: item[1], reverse=True))
+    cashtop = dict(sorted(economy.items(), key=lambda item: item[1], reverse=True))
     number = 0
     number2 = number + 1
     embed = discord.Embed(title='Топ пользователей', color=settings['embedcolor']).set_thumbnail(url=settings['bot_avatar_url'])
-    for item in coolswag:
+    for item in cashtop:
         balance = economy[item]
 
         embed.add_field(name=str(number2) + ' место - ' + str(balance) + ' монет', value=f'<@{item}>', inline=False)
