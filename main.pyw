@@ -230,7 +230,6 @@ async def сервер(ctx):
 
         owner = str(ctx.guild.owner)
         id = str(ctx.guild.id)
-        region = str(ctx.guild.region)
         memberCount = str(ctx.guild.member_count)
 
         icon = str(ctx.guild.icon_url)
@@ -241,7 +240,6 @@ async def сервер(ctx):
         embed.set_thumbnail(url=icon)
         embed.add_field(name="Владелец", value=owner, inline=False)
         embed.add_field(name="ID сервера", value=id, inline=False)
-        embed.add_field(name="Регион", value=region, inline=False)
         embed.add_field(name="Кол-во участников", value=memberCount, inline=False)
 
         await ctx.send(embed=embed)
